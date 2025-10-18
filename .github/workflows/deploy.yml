@@ -1,0 +1,31 @@
+name: Deploy Website and Inject Secret
+
+on:
+  push:
+    branches:
+      - main # Change this to your main branch name if it's 'master' or something else
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Inject Secret URL into HTML
+        # The 'IFRAME' is the name of the secret you set in GitHub
+        run: |
+          # 1. Inject the full iframe URL into the 'src' of the iframe
+          sed -i "s|IFRAME_SECRET_URL_PLACEHOLDER|${{ secrets.IFRAME }}|g" index.html
+          # 2. Inject the plain link (without ?widget=true...) into the footer link
+          # IMPORTANT: For the footer, you'll need to create a second secret 
+          # named IFRAME_PLAIN_LINK containing only the sheet's base URL.
+          sed -i "s|IFRAME_SECRET_URL_PLACEHOLDER_FOOTER|${{ secrets.IFRAME_PLAIN_LINK }}|g" index.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./ # Assumes your index.html is in the root
