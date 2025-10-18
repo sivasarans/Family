@@ -41,6 +41,7 @@
       overflow: hidden;
       padding: 10px;
       animation: fadeIn 1s ease-in-out;
+      display: none; /* Hidden initially until password entered */
     }
 
     iframe {
@@ -70,6 +71,63 @@
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Password Screen */
+    .password-screen {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+      padding: 30px 25px;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .password-screen h2 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+    }
+
+    .password-screen input {
+      width: 80%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 2px solid #66a6ff;
+      border-radius: 8px;
+      outline: none;
+      margin-bottom: 15px;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .password-screen input:focus {
+      border-color: #0044cc;
+    }
+
+    .password-screen button {
+      background: linear-gradient(90deg, #66a6ff, #89f7fe);
+      border: none;
+      padding: 10px 25px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #fff;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .password-screen button:hover {
+      background: linear-gradient(90deg, #89f7fe, #66a6ff);
+    }
+
+    .error-message {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      display: none;
     }
 
     /* Mobile adjustments */
@@ -105,12 +163,41 @@
 <body>
   <h1>🏠 House Construction Expenses Tracker</h1>
 
-  <div class="container">
+  <!-- Password screen -->
+  <div class="password-screen" id="passwordScreen">
+    <h2>Enter Access Password</h2>
+    <input type="password" id="passwordInput" placeholder="Enter password" />
+    <br />
+    <button onclick="checkPassword()">Access</button>
+    <div class="error-message" id="errorMessage">Incorrect password. Please try again.</div>
+  </div>
+
+  <!-- Hidden container -->
+  <div class="container" id="mainContent">
     <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT9SS2QzLsosOmZnLZVXzIbzJQyqiIoYbPWoCkMF2RnOvtREYGBMxtBVWnRv6JME6sg11Yn9lw2s2Ft/pubhtml?widget=true&amp;headers=false" allowfullscreen></iframe>
   </div>
 
   <footer>
-    Updated live from <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vT9SS2QzLsosOmZnLZVXzIbzJQyqiIoYbPWoCkMF2RnOvtREYGBMxtBVWnRv6JME6sg11Yn9lw2s2Ft/pubhtml" target="_blank">Google Sheet</a>
+    Updated live from 
+    <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vT9SS2QzLsosOmZnLZVXzIbzJQyqiIoYbPWoCkMF2RnOvtREYGBMxtBVWnRv6JME6sg11Yn9lw2s2Ft/pubhtml" target="_blank">
+      Google Sheet
+    </a>
   </footer>
+
+  <script>
+    function checkPassword() {
+      const correctPassword = "7437";
+      const input = document.getElementById("passwordInput").value.trim();
+      const error = document.getElementById("errorMessage");
+
+      if (input === correctPassword) {
+        document.getElementById("passwordScreen").style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
+      } else {
+        error.style.display = "block";
+        setTimeout(() => { error.style.display = "none"; }, 2000);
+      }
+    }
+  </script>
 </body>
 </html>
