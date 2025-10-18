@@ -9,7 +9,12 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-
+# ⭐ ADD THIS BLOCK ⭐
+    permissions:
+      contents: write # Grants permission to push to the repository (required for gh-pages)
+      pages: write    # Grants permission to manage Pages deployment (good practice)
+      id-token: write # Required for deployment environments (good practice)
+    # ⭐ END OF BLOCK ⭐
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
